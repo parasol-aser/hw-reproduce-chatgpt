@@ -36,12 +36,53 @@ srun --nodes=1 --cpus-per-task=8 --mem=360g --gres=gpu:a100:1  --time=00:10:00 -
 ```
 sbatch train_gpt2.slurm
 ```
+
+train_gpt2.slurm:
+```
+#!/bin/bash
+#SBATCH --job-name=gpt2_train
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1  
+#SBATCH --cpus-per-task=32
+#SBATCH --time=24:00:00              #Request 24 hours
+#SBATCH --mem=128GB                  #Request 128GB per node
+#SBATCH --partition=gpu              #Request the GPU partition/queue
+#SBATCH --gres=gpu:a100:1            #Request one A100 GPU to use
+
+#SBATCH --output=gpt2_train.%j.log            #Redirect stdout/err to file
+
+# Run the training script
+./train_gpt2cu     -i "dev/data/fineweb10B/fineweb_train_*.bin"     -j "dev/data/fineweb10B/fineweb_val_*.bin"     -o log124M     -e "d12"     -b 32 -t 1024     -d 524288     -r 0     -z 1     -c 0.1     -l 0.0006     -q 0.0     -u 700     -n 5000     -v 250 -s 20000     -h 1
+```
+
 Logs:
 ```
 step    1/19560 | loss 11.010252 (+nanz)| norm 15.1374 (+nanz)| lr 8.57e-07 | 4688.25 ms | 28.8% bf16 MFU | 111830 tok/s
 ...
-step   80/19560 | loss 7.512386 (+nanz)| norm 1.1204 (+nanz)| lr 6.86e-05 | 4187.58 ms | 32.2% bf16 MFU | 125356 tok/s
-...
+step 19559/19560 | loss 3.314194 (+0.19z)| norm 0.2776 (+3.74z)| lr 1.79e-11 | 4339.91 ms | 31.1% bf16 MFU | 124285 tok/s
+step 19560/19560 | loss 3.252871 (-1.21z)| norm 0.2281 (+0.02z)| lr 0.00e+00 | 4367.96 ms | 30.9% bf16 MFU | 124072 tok/s
+val loss 3.265413
+generating:
+---
+The name of Sam Ray Dalsman is Recappable because he is the same male as Hogwood, John Hand, Arden Moses, George Haddock, and Stephen Ennies. An unbounded band that was banned by American governments to such offensive and subversive acts as Homopoglands is tainted with
+---
+Writing checkpoint at step 19560
+Writing model to log124M/model_00019560.bin
+Writing state to log124M/state_00019560_00000.bin
+total average iteration time: 4179.953030 ms
 ```
 
-**Baseline HellaSwag accuracy:** 29.9
+Evaluation results:
+```
+----------------------------------------
+arc_challenge_25shot.json      : 22.0137
+gsm8k_5shot.json               : 0.0758
+hellaswag_10shot.json          : 31.3782
+mmlu_5shot.json                : 25.6644
+truthfulqa_0shot.json          : 42.6879
+winogrande_5shot.json          : 49.8816
+----------------------------------------
+Average Score                  : 28.6169
+```
+
+**Baseline HellaSwag accuracy:** 31.3
