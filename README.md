@@ -27,11 +27,11 @@ python dev/data/fineweb.py --version 10B
 python dev/data/hellaswag.py
 ```
 
-- *Alternatively, add a soft link to my shared data folder (pre-downloaded data for both training and evaluation)*
+- *Alternatively, add a soft link to our shared data folder (pre-downloaded data for both training and evaluation)*
 
 ```
 rm -rf dev/data
-ln -s /scratch/user/jeffhuang/llm.c/dev/data dev/
+ln -s /scratch/group/csce689609/data dev/
 ```
 
 ### Training Test for 10mins
