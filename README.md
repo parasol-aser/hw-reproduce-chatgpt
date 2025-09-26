@@ -5,7 +5,7 @@
 ### Setup on Grace
 ```
 module load GCC/12.3
-module load CUDA/12.3
+module load CUDA/12.2
 ```
 ```
 cd $SCRATCH
@@ -39,7 +39,7 @@ ln -s /scratch/group/csce689609/data dev/
 srun --nodes=1 --cpus-per-task=32 --mem=128g --gres=gpu:a100:1  --time=00:10:00 --pty bash -i
 ```
 ```
-./train_gpt2cu     -i "dev/data/fineweb10B/fineweb_train_*.bin"     -j "dev/data/fineweb10B/fineweb_val_*.bin"     -o log124M     -e "d12"     -b 32 -t 1024     -d 524288     -r 0     -z 1     -c 0.1     -l 0.0006     -q 0.0     -u 700     -n 5000     -v 250 -s 20000     -h 1
+./train_gpt2cu     -i "dev/data/fineweb10B/fineweb_train_*.bin"     -j "dev/data/fineweb10B/fineweb_val_*.bin"     -o log124M     -e "d12"     -b 16 -t 1024     -d 262144     -r 0     -z 1     -c 0.1     -l 0.0006     -q 0.0     -u 700     -n 5000     -v 250 -s 20000     -h 1
 ```
 
 ### Training for 24h
